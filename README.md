@@ -32,7 +32,7 @@
   Supports custom resources, operators, and third-party integrations.
 
 ### Common Components
-
+Find more about these from here ['README.md`]()
 - **Node**: A physical or virtual machine running pods.  
 - **Pod**: The smallest deployable unit; contains one or more containers.  
 - **Deployment**: Manages a set number of pods and updates them safely.  
