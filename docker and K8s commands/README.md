@@ -71,6 +71,93 @@
 
 ### Helm Chart Structure
 
- mychart/
-|_
-|
+
+mychart/              Top level folder name of chart
+  Chart.yaml 
+  values.yaml         Chart.yaml -> metadata info about chart   
+  charts/
+  templates/           values.yaml -> values for the template files.     
+
+
+- Values injection example (`values.yaml`):
+
+``yaml
+imageName: myapp
+port: 8080
+version: 1.0.0
+``
+## Kubernetes Volumes
+
+Needed because containers are ephemeral; data does not persist by default.
+PersistentVolume (PV): cluster-wide storage resource.
+PersistentVolumeClaim (PVC): request mapping to PV.
+
+Example StorageClass:
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: storage-class-name
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: io1
+  iopsPerGB: "10"
+  fsType: ext4
+
+## Stateful vs Statelesss Apps
+* Stateless: each request is independent; use Deployments.
+* Stateful: maintain state/data; use StatefulSet (databases, Elasticsearch, MongoDB).
+
+#Services 
+
+* ClusterIP: default, internal visibility.
+* NodePort: exposes service externally via static/dynamic port.
+* LoadBalancer: external load balancing.
+* Use selectors and labels to route traffic to pods.
+
+## Workloads 
+
+* Pod: running container(s).
+* ReplicaSet: ensures desired number of pods.
+* Deployment: manages ReplicaSets; allows updates & rollbacks.
+* DaemonSet: runs pod on all (or subset of) nodes.
+* Job: executes pods to completion.
+* CronJob: scheduled jobs.
+
+## Command Cheat Sheet 
+```
+# Deployment
+k create deploy [name] --image=busybox --replicas=3 --port=80
+k apply -f [definition.yml]
+k get deploy
+k describe deploy [name]
+k delete deploy [name]
+
+# ReplicaSet
+k get rs
+k describe rs [name]
+k delete rs [name]
+
+# DaemonSet
+k apply -f [definition.yml]
+k get ds
+k describe ds [name]
+k delete ds [name]
+
+# Job
+k create job [name] --image=busybox
+k apply -f [definition.yml]
+k get job
+k describe job [name]
+k delete job [name]
+
+# CronJob
+k apply -f [cronjob.yml]
+k get cronjob
+k delete cronjob [name]
+
+# Horizontal Pod Autoscaler
+k autoscale deployment [name] --cpu-percent=50 --min=3 --max=10
+k get hpa [name]
+
+```
+  
