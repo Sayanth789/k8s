@@ -44,6 +44,15 @@ Find more about these from here ['README.md`](https://github.com/Sayanth789/k8s/
 ## How to Use This Repo
 
 This repo demonstrates Kubernetes basics including **pods, deployments, services, and scaling**.
+- This file[`nginx.yml`]() lets you access your Nginx pods from outside the cluster or internally via a stable IP.
+- It ensures desired state for the pods.
+- Replicas: 3 → Runs 3 pods of Nginx.
+- Selector & Labels → Ties pods to this deployment and Service.
+- **Container spec:**
+    Image: nginx → pulls the official Nginx image.
+    Limits: Restricts CPU and memory per pod.
+    Ports: Exposes port 80 inside each pod.
+In short: This Deployment runs, manages, and updates 3 Nginx pods, and ensures if one crashes, another will start automatically.
 
 ### Declarative Approach (YAML)
 
