@@ -6,28 +6,58 @@
 
 ## Node and Pod
 
-- **Node**: Virtual or physical machine.  
-- **Pod**: Smallest unit in Kubernetes. Provides abstraction over containers.  
-  - Usually 1 application per pod.  
-  - Each pod gets its own IP address.  
+- **Node**: Virtual or physical machine  that runs Kubernetes workloads.
+  - Each node runs pods and has components like kubelet, container runtime, and kube-proxy.
+  - Can be a master (control plane) or worker (executes workloads).
+ 
+- **Pod**: Smallest deployable unit in Kubernetes, usually containing a single container or tightly coupled containers.  
+  - Provides network and storage abstraction for containers.  
+  - Each pod gets a unique IP address within the cluster.  
+  - Pods are ephemeral; they can be created, scaled, and destroyed dynamically.
 
-- **Service**: Static or permanent IP address attached to a pod.  
-  - Lifecycle of Pod and Service are independent.  
+- **Service**: An abstraction that defines a logical set of pods and a policy to access them.   
+  - Provides stable networking for pods.
+  - Lifecycle of Pod and Service are independent allowing pods to die and be replaced without affecting clients.
+  - 
 
 - **Ingress**: Secures connections to pods.
-
 ---
 
 ## ConfigMap and Secret
+- **ConfigMap**: Stores non-sensitive configuration data for pods.  
+  - Can be injected as environment variables, command-line arguments, or files.  
+  - Helps separate configuration from application code.
 
-- **ConfigMap**: External configuration of applications.  
-- **Secret**: Store sensitive data in Base64 format.
+- **Secret**: Stores sensitive data like passwords, API keys, or tokens in Base64 encoding.  
+  - Can also be injected as environment variables or mounted as files.  
+  - More secure than storing credentials in ConfigMaps.
 
 ---
 
 ## Data Storage
 
-- **Volume**: Attaches physical storage, can be remote or outside the cluster.  
+- **Volume**: A directory accessible to containers in a pod that persists beyond container restarts.  
+  - Helps manage data that needs to survive pod restarts.  
+  - Can be backed by local disk, network storage, or cloud volumes.
+
+- **PersistentVolume (PV)**: Cluster-wide storage resource that admins provision or dynamically create.  
+  - Represents actual physical storage.  
+
+- **PersistentVolumeClaim (PVC)**: A request for storage by a pod.  
+  - Binds to a PV that satisfies storage size, access modes, and class.
+
+Example StorageClass:
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: storage-class-name
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: io1
+  iopsPerGB: "10"
+  fsType: ext4
+```
 
 ### Node Process
 
@@ -38,9 +68,11 @@
 ### Master Process
 
 - Gateway of cluster, acts as gatekeeper for authentication.  
-
+- Handles authentication, scheduling, state management, and API requests.
 ### Minikube
-
+- Tool to run a single-node Kubernetes cluster locally.
+- Ideal for testing and learning purposes.
+- Runs nodes inside a lightweight VM (e.g., VirtualBox, Docker).
 - Creates a VirtualBox VM on local machine.  
 - Node runs inside this VM for testing purposes.
 
@@ -48,36 +80,39 @@
 
 ## Config File Parts
 
-1. **Metadata**  
-2. **Specification**  
-3. **Status** (auto-generated; supports self-healing)
+1. **Metadata**: Can be objects name, labels, annotations  
+2. **Specification**  - Desired state and configurations
+3. **Status** -Current state, automatically managed by Kubernetes for self-healing. (auto-generated; supports self-healing)
 
 ---
 
 ## Namespace
 
-- Group resources logically.  
+- Provides logical separation of resources in a cluster.
 - Helps avoid conflicts and manage staging/development.  
 - Supports Blue/Green deployment.  
 - Access & resource limits per namespace.
-
+- Prevents naming collisions.
 ---
 
 ## Helm
 
-- Package manager for K8s YAML files.  
+-  Helm is the package manager for K8s YAML files.
+-  Packages are called **charts** which can include templates, default values and dependencies.
 - Supports templating & distributing charts.  
 - Common charts: Elasticsearch, MySQL, MongoDB, Prometheus.
 
 ### Helm Chart Structure
 
-
-mychart/              Top level folder name of chart
+```
+mychart/              #Top level folder name of chart
   Chart.yaml 
-  values.yaml         Chart.yaml -> metadata info about chart   
+  values.yaml         #Chart.yaml -> metadata info about chart   
   charts/
-  templates/           values.yaml -> values for the template files.     
+  templates/           #values.yaml -> values for the template files.
 
+
+```
 
 - Values injection example (`values.yaml`):
 
@@ -194,7 +229,7 @@ strategy:
 
 
 # Scaling 
-* Horizonalt Pod Autoscaling (HPA) : Scale pods based on the CPU/memory metrics.
+* Horizontal Pod Autoscaling (HPA) : Scale pods based on the CPU/memory metrics.
 
 * Manual scaling: `k scale deplyment [name] --replicaset=[num]`
 
