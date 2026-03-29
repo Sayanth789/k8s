@@ -161,23 +161,35 @@ parameters:
 
 ## Command Cheat Sheet 
 ```
+## Command Cheat Sheet (Extended)
+
 # Deployment
 k create deploy [name] --image=busybox --replicas=3 --port=80
 k apply -f [definition.yml]
 k get deploy
 k describe deploy [name]
 k delete deploy [name]
+k rollout status deploy [name]                # Check rollout status
+k rollout history deploy [name]               # View rollout history
+k rollout undo deploy [name]                  # Rollback deployment
+k scale deploy [name] --replicas=5           # Manually scale deployment
+k get deploy [name] -o yaml                   # Get full manifest
+k edit deploy [name]                          # Edit deployment live
 
 # ReplicaSet
 k get rs
 k describe rs [name]
 k delete rs [name]
+k scale rs [name] --replicas=3               # Scale ReplicaSet
+k get rs [name] -o yaml                       # Full manifest
 
 # DaemonSet
 k apply -f [definition.yml]
 k get ds
 k describe ds [name]
 k delete ds [name]
+k rollout status ds [name]
+k edit ds [name]
 
 # Job
 k create job [name] --image=busybox
@@ -185,15 +197,31 @@ k apply -f [definition.yml]
 k get job
 k describe job [name]
 k delete job [name]
+k logs job/[name]                             # View logs of completed job
+k get pods --selector=job-name=[name]        # List pods of a job
 
 # CronJob
 k apply -f [cronjob.yml]
 k get cronjob
+k describe cronjob [name]
 k delete cronjob [name]
+k get jobs --selector=job-name=[cronjob-name]  # See triggered jobs
+k logs job/[job-name]                           # Logs from triggered job pods
 
 # Horizontal Pod Autoscaler
 k autoscale deployment [name] --cpu-percent=50 --min=3 --max=10
 k get hpa [name]
+k describe hpa [name]
+k delete hpa [name]
+
+# Pods (useful across all workloads)
+k get pods
+k describe pod [name]
+k logs [pod-name]                             # Logs from a pod
+k logs -f [pod-name]                          # Follow logs
+k exec -it [pod-name] -- /bin/sh             # Access pod shell
+k port-forward [pod-name] 8080:80            # Port-forward to local machine
+k delete pod [name]                           # Force delete pod
 
 ```
 
