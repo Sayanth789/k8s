@@ -44,7 +44,7 @@ Find more about these from here ['README.md`](https://github.com/Sayanth789/k8s/
 ## How to Use This Repo
 
 This repo demonstrates Kubernetes basics including **pods, deployments, services, and scaling**.
-- This file[`nginx.yml`]() lets you access your Nginx pods from outside the cluster or internally via a stable IP.
+- This file[`nginx.yml`](https://github.com/Sayanth789/k8s/blob/main/nginx.yaml) lets you access your Nginx pods from outside the cluster or internally via a stable IP.
 - It ensures desired state for the pods.
 - Replicas: 3 → Runs 3 pods of Nginx.
 - Selector & Labels → Ties pods to this deployment and Service.
