@@ -1,43 +1,60 @@
-## 📚 K8s ⚛️ 🚢
+# Kubernetes Project - k8s
 
-## These are some personal notes about K8s. May be someone will find useful.
-## Notes:
-### About kubernetes
-* **Open-source container orchestration platform, help automate the deployment, scaling and management of containers**
+> ⚠️ Note: I use `k` as an alias for `kubectl` in all commands.
 
-**Containers (like Docker) package your app and its dependencies into a single, portable unit. Kubernetes takes it further by managing many containers across multiple machines reliably.**
+---
 
+## Kubernetes Overview 🌐
 
-## 🔐 Key Features
-* **Automated Scheduling & Scaling**
+**Kubernetes (k8s)** is an **open-source container orchestration platform** that automates the deployment, scaling, and management of containerized applications. Containers package your app and its dependencies, and Kubernetes manages these containers reliably across multiple nodes.
 
-**Deploy containers across nodes efficiently.**
+### Key Features
 
-**Scale pods up/down automatically with Horizontal Pod Autoscaler.**
-## **Self-Healing**
-**Restarts failed containers automatically.**
-**Replaces containers when nodes fail.**
-**Kills unresponsive pods.**
-## Service Discovery & Load Balancing
-**Provides internal networking between pods.**
-**Supports external traffic via Services, NodePorts, or Ingress.**
-## Declarative Configuration
-**Define desired state in YAML/JSON files (Deployments, Services, ConfigMaps).**
-**Kubernetes ensures the live cluster matches that state.**
-**Rolling Updates & Rollbacks**
-**Deploy new versions without downtime.**
-**Rollback to previous versions if something goes wrong.**
-## Secret & Config Management
-**Store sensitive data securely using Secrets.**
-**Use ConfigMaps for app configuration.**
-## Extensibility
-**Supports custom resources, operators, and third-party integrations.**
+- **Automated Scheduling & Scaling**  
+  Deploy containers across nodes efficiently. Scale pods automatically with **Horizontal Pod Autoscaler (HPA)**.
 
-## Common Components
-**Node: A machine (physical or virtual) that runs containers.**
-**Pod: The smallest deployable unit (one or more containers).**
-**Deployment: Ensures a set number of pods are running.**
-**Service: Stable networking endpoint for pods.**
-**Ingress: Handles external HTTP/S traffic and routing.**
+- **Self-Healing**  
+  Restarts failed containers, replaces pods on node failure, and kills unresponsive pods.
 
-In short: **Kubernetes manages your containers like an operating system manages processes, making it easy to deploy, scale, and maintain apps in production.**
+- **Service Discovery & Load Balancing**  
+  Provides internal networking between pods, and external traffic management via Services or Ingress.
+
+- **Declarative Configuration**  
+  Define desired state in YAML/JSON files. Kubernetes ensures the cluster matches that state.
+
+- **Rolling Updates & Rollbacks**  
+  Deploy new versions without downtime and rollback if needed.
+
+- **Secrets & Config Management**  
+  Securely store sensitive data with Secrets, and app configurations with ConfigMaps.
+
+- **Extensibility**  
+  Supports custom resources, operators, and third-party integrations.
+
+### Common Components
+
+- **Node**: A physical or virtual machine running pods.  
+- **Pod**: The smallest deployable unit; contains one or more containers.  
+- **Deployment**: Manages a set number of pods and updates them safely.  
+- **Service**: Stable networking endpoint for pods.  
+- **Ingress**: Manages external HTTP/S traffic and routing.
+
+---
+
+## How to Use This Repo
+
+This repo demonstrates Kubernetes basics including **pods, deployments, services, and scaling**.
+
+### Declarative Approach (YAML)
+
+- The file [`deployment.yml`](https://github.com/Sayanth789/k8s/blob/main/deployment.yml) defines your desired state.  
+- Using YAML manifests like this is called the **declarative way**: you describe **what you want**, and Kubernetes ensures the cluster matches it.
+
+```bash
+# Apply the declarative deployment
+k apply -f deployment.yml
+
+# Check resources
+k get deploy
+k get pods
+k get svc
