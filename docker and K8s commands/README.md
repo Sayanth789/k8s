@@ -91,7 +91,7 @@ version: 1.0.0
 Needed because containers are ephemeral; data does not persist by default.
 PersistentVolume (PV): cluster-wide storage resource.
 PersistentVolumeClaim (PVC): request mapping to PV.
-
+```
 Example StorageClass:
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -102,6 +102,7 @@ parameters:
   type: io1
   iopsPerGB: "10"
   fsType: ext4
+```
 
 ## Stateful vs Statelesss Apps
 * Stateless: each request is independent; use Deployments.
@@ -160,4 +161,58 @@ k autoscale deployment [name] --cpu-percent=50 --min=3 --max=10
 k get hpa [name]
 
 ```
+
+# Rolling Updates 
+Update deployments with minimal downtime.
+Key options : 
+* `maxUnavailable:` Pods allowed to be unavailable during updates.
+* `maxSurge`: Pofs allowed above the desired count during update.
+
+Example: 
+```
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 25%
+    maxUnavailable: 25%
+```
+## Blue/Green Deployment
+* Run two environments: Blue (current) and Green (new).
+* Switch traffic from Blue → Green after validation.
+* Reduces downtime & rollback complexity.
+
+## Labels and Selectors 
+* **Labels** : Key-value pairs to categorize the objects
+* **Selectors**: Filter or select resources using the labels.
+* Used for services, Replicaset, Deplyments etc.
+
+## Networking
+* Pod-to-Pod communication: via Pod IPs.
+* Service-to-Pod communication: via ClusterIP/NodePort/LoadBalancer.
+* Ingress: Manage external HTTP/S access.
+* NetworkPolicy: Control traffic flow between pods.
+
+
+# Scaling 
+* Horizonalt Pod Autoscaling (HPA) : Scale pods based on the CPU/memory metrics.
+
+* Manual scaling: `k scale deplyment [name] --replicaset=[num]`
+
+* HPA requires Metric server, resources & limits defined.
+
+##Tips & Best Practices
+* Use Namespaces to isolate teams/environments.
+* Always define resource limits for pods.
+* Use ConfigMaps and Secrets instead of hardcoding values.
+* Prefer Deployments over managing ReplicaSets manually.
+* Monitor pods using k get pods -o wide or tools like k9s.
+* Persist data with PVCs for databases and stateful applications.
+* Use Helm charts for reproducible deployments.
+  
+  
+
+
+  
+
+
   
